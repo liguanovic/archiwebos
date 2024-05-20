@@ -52,7 +52,9 @@ body {
 	margin:auto;
 	font-family: 'Work Sans' ;
 	font-size: 14px;
+	background-color: #FFFEF8;
 }
+
 header {
 	display: flex;
 	justify-content: space-between;
@@ -125,6 +127,48 @@ li:hover {
 	text-align: center;
 	margin-bottom: 1em;
 }
+
+
+/** mon code **/
+.filters {
+	display: flex;
+	justify-content: center;
+	gap: 20px;
+	list-style-type: none;
+	padding: 0;
+	margin: 30px 0;
+}
+
+.filters li {
+	display: flex;
+            align-items: center;
+}
+
+.filters button {
+	border-radius: 60px;
+	border: 1px solid #1D6154;
+	background-color: #ffff;
+	font-size: 1rem;
+	color: #1D6154;
+	font-family: 'Syne', sans-serif;
+	padding: 9px;
+	cursor: pointer;
+}
+
+.filters button:hover {
+	background-color: #0E2F28;
+	color: white;
+}
+
+.works figcaption {
+	margin-top:10px;
+	font-size: 1rem;
+}
+
+	
+
+
+
 .gallery {
 	width: 100%;
 	display: grid;
@@ -180,9 +224,16 @@ input[type="submit"]{
 	border-radius: 60px ;
 }
 
+footer {
+	background-color: white;
+	width: 100%;
+	margin: 0; 
+	padding: 10px 0;
+}
+
 footer nav ul {
 	display: flex;
 	justify-content: flex-end;
-	margin: 2em
+	margin: 20px 0;
 }
 
