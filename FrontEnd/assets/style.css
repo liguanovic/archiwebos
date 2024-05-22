@@ -297,6 +297,13 @@ nav ul li a:visited {
 	font-size: 1rem;
 }
 
+#error-message{
+	color: red;
+	font-size: 1rem;
+	margin-top: 20px;
+	font-weight: bold;
+}
+
 #contact , #loginForm {
 	width: 50%;
 	margin: auto;
