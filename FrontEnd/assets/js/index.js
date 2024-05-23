@@ -1,27 +1,46 @@
 "use strict";
 
 // ***** CONSTANTS ***** //
+const URL = "http://localhost:5678/api/";
 
-const galleryContainer = document.querySelector(".gallery");
-const categoriesContainer = document.querySelector(".filters");
 
 // ***** VARIABLES ***** //
-
+let categories = [];
 
 // ***** FUNCTIONS ***** //
 
+// FETCH // 
 
+/**
+ * Fetches the works data from the server and returns it as a promise.
+ *
+ * @return {Promise<Array>} A promise that resolves to an array of works data.
+ */
 async function fetchWorks() {
-  const url = "http://localhost:5678/api/works";
-
-  const response = await fetch(url);
-  let works = await response.json();
-  console.log("Projets récupérés :", works);
+  const response = await fetch(URL + "works");
+  const works    = await response.json();
+  
   return works;
 }
 
+/**
+ * Fetches the categories data from the server and returns it as a promise.
+ */
+async function fetchCategories() {
+  const response = await fetch(URL + "categories");
+  categories     = await response.json();
+}
+
+// DISPLAY WORKS //
+
+/**
+ * Adds works to the HTML gallery.
+ *
+ * @param {Array} works - An array of work objects containing properties like categoryId, imageUrl, and title.
+ */
 function addWorksToHTML(works) {
   console.log("Ajout des projets à la galerie...");
+
   for (const work of works) {
     const figureElement = document.createElement("figure");
     const imgElement = document.createElement("img");
@@ -35,21 +54,21 @@ function addWorksToHTML(works) {
 
     figureElement.appendChild(imgElement);
     figureElement.appendChild(figcaptionElement);
-    galleryContainer.appendChild(figureElement);
+    document.querySelector(".gallery").appendChild(figureElement);
 
   };
 }
 
-async function fetchFilters() {
-  const url = "http://localhost:5678/api/categories";
+// FILTERS //
 
-  const response = await fetch(url);
-  let categories = await response.json();
-  console.log("Categories :", categories);
-  return categories;
-}
-
+/**
+ * Adds filters to the DOM based on the given categories.
+ *
+ * @param {Array} categories - An array of category objects containing properties like id and name.
+ */
 function addFilters(categories) {
+  const categoriesContainer = document.querySelector(".filters");
+
   for (const category of categories) {
     const li = document.createElement("li");
     const filter = document.createElement("button");
@@ -62,34 +81,70 @@ function addFilters(categories) {
     categoriesContainer.appendChild(li);
   };
 
-  filterWorks();
+  categoriesContainer.addEventListener("click", filterWorks);
 }
 
-function filterWorks() {
-  categoriesContainer.addEventListener("click", (event) => {
-    const clickedCategoryId = event.target.id;
+/**
+ * Filters the works based on the clicked category ID.
+ *
+ * @param {Event} event - The event object triggered by the click.
+ */
+function filterWorks(event) {
+  const clickedCategoryId = event.target.id;
 
-    if (!clickedCategoryId) return;
+  if (!clickedCategoryId) return;
 
-    const works = document.querySelectorAll(".works");
-    
-    works.forEach(work => {
-      if (clickedCategoryId === "all" ? true : work.id === clickedCategoryId) {
-        work.style.display = "block";
-      } else {
-        work.style.display = "none";
-      }
-    });
+  const works = document.querySelectorAll(".works");
+
+  works.forEach(work => {
+    if (clickedCategoryId === "all" ? true : work.id === clickedCategoryId) {
+      work.style.display = "block";
+    } else {
+      work.style.display = "none";
+    }
   });
 }
 
+// ADMIN //
 
+/**
+ * Displays the admin interface if a token is present in local storage, otherwise fetches categories and adds filters.
+ *
+ * @return {Promise<void>} A promise that resolves when the admin interface is displayed or filters are added.
+ */
+async function displayAdmin() {
+  if (localStorage.getItem("token")) {
+    // TODO : afficher le bouton de deconnexion + AFFICHER LA BANNER ADMIN + afficher le bouton modifier les projets
+
+  } else {
+    addFilters(categories);
+  }
+}
+
+// LOGOUT //
+
+/**
+ * Logs out the user by removing the token from local storage and reloading the page.
+ */
+function logout() {
+  localStorage.removeItem("token");
+  window.location.reload;
+}
+
+// MAIN //
+
+/**
+ * Executes the main function.
+ * 
+ * @return {Promise<void>} A promise that resolves when the main function is completed.
+ */
 async function main() {
-  let works = await fetchWorks();
-  addWorksToHTML(works);
+  const works = await fetchWorks();
 
-  let categories = await fetchFilters();
-  addFilters(categories);
+  await fetchCategories();
+
+  addWorksToHTML(works);
+  displayAdmin(); 
 }
 
 main();
