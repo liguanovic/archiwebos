@@ -341,8 +341,9 @@ nav ul li a:active nav ul li a:focus {
 	color: transparent;
 }
 
-.editContainer {
-	cursor: pointer;}
+.edit-container {
+	cursor: pointer;
+}
 
 #loginForm {
 	padding-top: 100px;
