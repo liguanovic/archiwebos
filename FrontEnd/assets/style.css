@@ -136,17 +136,22 @@ table {
 
 /** end reset css**/
 body {
-	max-width: 1140px;
 	margin: auto;
 	font-family: 'Work Sans';
 	font-size: 14px;
 	background-color: #FFFEF8;
 }
 
+main,
+header {
+	max-width: 1140px;
+	margin: auto;
+}
+
 header {
 	display: flex;
 	justify-content: space-between;
-	margin: 50px 0
+	margin-top: 50px;
 }
 
 section {
@@ -176,6 +181,20 @@ h2 {
 	color: #1D6154
 }
 
+.banner {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 59px;
+	background-color: black;
+	color: white;
+}
+
+.banner i {
+	color: #FFFEF8;
+	margin-right: 10px;
+}
+
 nav ul {
 	display: flex;
 	align-items: center;
@@ -200,6 +219,10 @@ li:hover {
 
 nav ul li a:visited {
 	font-weight: bold;
+}
+
+nav ul li a:active nav ul li a:focus {
+	font-weight: 700;
 }
 
 #introduction {
@@ -270,6 +293,12 @@ nav ul li a:visited {
 	color: white;
 }
 
+.filters button:active,
+.filters button:focus {
+	background-color: #1D6154;
+	color: white;
+}
+
 .works figcaption {
 	margin-top: 10px;
 	font-size: 1rem;
@@ -293,46 +322,52 @@ nav ul li a:visited {
 
 #loginForm a {
 	display: block;
-	color : black;
+	color: black;
 	font-size: 1rem;
 }
 
-#error-message{
+#error-message {
 	color: red;
 	font-size: 1rem;
 	margin-top: 20px;
 	font-weight: bold;
 }
 
-#contact , #loginForm {
+#contact,
+#loginForm {
 	width: 50%;
 	margin: auto;
 }
 
-#contact>*, #loginForm>* {
+#contact>*,
+#loginForm>* {
 	text-align: center;
 
 }
 
-#contact h2, #loginForm h2 {
+#contact h2,
+#loginForm h2 {
 	margin-bottom: 20px;
 }
 
-#contact form, #loginForm form {
+#contact form,
+#loginForm form {
 	text-align: left;
 	margin-top: 30px;
 	display: flex;
 	flex-direction: column;
 }
 
-#contact input , #loginForm input {
+#contact input,
+#loginForm input {
 	height: 50px;
 	font-size: 1.2em;
 	border: none;
 	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
 }
 
-#contact label, #loginForm label {
+#contact label,
+#loginForm label {
 	margin: 2em 0 1em 0;
 }
 
@@ -370,4 +405,4 @@ footer nav ul li {
 
 [id="login-footer"] {
 	margin-top: 100px;
-  }
+}

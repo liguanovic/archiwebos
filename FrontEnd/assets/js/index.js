@@ -18,8 +18,8 @@ let categories = [];
  */
 async function fetchWorks() {
   const response = await fetch(URL + "works");
-  const works    = await response.json();
-  
+  const works = await response.json();
+
   return works;
 }
 
@@ -28,7 +28,7 @@ async function fetchWorks() {
  */
 async function fetchCategories() {
   const response = await fetch(URL + "categories");
-  categories     = await response.json();
+  categories = await response.json();
 }
 
 // DISPLAY WORKS //
@@ -68,6 +68,15 @@ function addWorksToHTML(works) {
  */
 function addFilters(categories) {
   const categoriesContainer = document.querySelector(".filters");
+
+  const allButton = document.createElement("button");
+  allButton.id = "all";
+  allButton.innerText = "Tous";
+  allButton.classList.add("filters");
+
+  const allLi = document.createElement("li");
+  allLi.appendChild(allButton);
+  categoriesContainer.appendChild(allLi);
 
   for (const category of categories) {
     const li = document.createElement("li");
@@ -113,12 +122,55 @@ function filterWorks(event) {
  * @return {Promise<void>} A promise that resolves when the admin interface is displayed or filters are added.
  */
 async function displayAdmin() {
+  const loginLink = document.getElementById('loginLink');
+
   if (localStorage.getItem("token")) {
     // TODO : afficher le bouton de deconnexion + AFFICHER LA BANNER ADMIN + afficher le bouton modifier les projets
 
-  } else {
-    addFilters(categories);
-  }
+    function toggleLoginLogout() {
+      if (localStorage.getItem("token")) {
+        loginLink.textContent = "logout";
+        loginLink.href = "#";
+        loginLink.addEventListener("click", logoutHandler);
+      } else {
+        loginLink.textContent = "login";
+        loginLink.href = "login.html";
+        loginLink.removeEventListener("click", logoutHandler);
+      }
+    }
+
+    function logoutHandler(event) {
+      event.preventDefault();
+      localStorage.removeItem("token");
+      window.location.reload();
+    }
+
+    function addBanner() {
+      const banner = document.createElement("div");
+      banner.classList.add("banner");
+
+      const icon = document.createElement("i");
+      icon.classList.add("fas", "fa-pen-to-square");
+      banner.appendChild(icon);
+
+      const bannerText = document.createElement("span")
+      banner.innerText = "Mode Création";
+
+      const firstChild = document.body.firstChild;
+      document.body.insertBefore(banner, firstChild);
+
+
+      console.log("Bannière ajoutée :", banner);
+      console.log("Icône ajoutée :", icon);
+    }
+
+    addBanner();
+
+    toggleLoginLogout();
+
+    } else {
+      addFilters(categories);
+    }
 }
 
 // LOGOUT //
@@ -144,7 +196,7 @@ async function main() {
   await fetchCategories();
 
   addWorksToHTML(works);
-  displayAdmin(); 
+  displayAdmin();
 }
 
 main();
