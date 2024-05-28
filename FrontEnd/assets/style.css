@@ -255,6 +255,7 @@ nav ul li a:active nav ul li a:focus {
 #portfolio h2 {
 	text-align: center;
 	margin-bottom: 1em;
+	margin-right: 20px;
 }
 
 
@@ -315,6 +316,33 @@ nav ul li a:active nav ul li a:focus {
 .gallery img {
 	width: 100%;
 }
+
+.fas {
+	font-weight: 300;
+	margin-right: 10px;
+}
+
+#portfolio header {
+    display: flex;
+    justify-content: center;
+	align-items: baseline;
+}
+
+.edit-button {
+    margin-right: 10px;
+	border: none;
+	color: black;
+	font-size: 1rem;
+	background: transparent;
+	cursor: pointer;
+}
+
+.button .edit-button {
+	color: transparent;
+}
+
+.editContainer {
+	cursor: pointer;}
 
 #loginForm {
 	padding-top: 100px;

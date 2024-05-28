@@ -148,29 +148,50 @@ async function displayAdmin() {
     function addBanner() {
       const banner = document.createElement("div");
       banner.classList.add("banner");
-
+  
+      const bannerContent = document.createElement("span"); 
       const icon = document.createElement("i");
+      
       icon.classList.add("fas", "fa-pen-to-square");
-      banner.appendChild(icon);
-
-      const bannerText = document.createElement("span")
-      banner.innerText = "Mode Création";
-
+      bannerContent.appendChild(icon);
+      bannerContent.appendChild(document.createTextNode("Mode Création")); 
+  
+      banner.appendChild(bannerContent); 
       const firstChild = document.body.firstChild;
       document.body.insertBefore(banner, firstChild);
-
-
+  
       console.log("Bannière ajoutée :", banner);
       console.log("Icône ajoutée :", icon);
-    }
+  }
 
+  function addEditButton() {
+    const portfolioHeader = document.querySelector("#portfolio header");
+    const editContainer = document.createElement("a");
+    const editContent = document.createElement("div"); 
+    const editIcon = document.createElement("i");
+
+    editContainer.classList.add("edit-container");
+    editIcon.classList.add("fas", "fa-pen-to-square");
+
+    editContent.appendChild(editIcon);
+    editContent.insertAdjacentText('beforeend', "modifier");
+
+    portfolioHeader.appendChild(editContainer);
+    editContainer.appendChild(editContent);
+
+    editContainer.addEventListener("click", () => {
+      window.location.href = "#";
+  });
+}
+  
     addBanner();
+    addEditButton();
 
     toggleLoginLogout();
 
-    } else {
-      addFilters(categories);
-    }
+  } else {
+    addFilters(categories);
+  }
 }
 
 // LOGOUT //
