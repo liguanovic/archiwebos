@@ -323,13 +323,13 @@ nav ul li a:active nav ul li a:focus {
 }
 
 #portfolio header {
-    display: flex;
-    justify-content: center;
+	display: flex;
+	justify-content: center;
 	align-items: baseline;
 }
 
 .edit-button {
-    margin-right: 10px;
+	margin-right: 10px;
 	border: none;
 	color: black;
 	font-size: 1rem;
@@ -341,8 +341,100 @@ nav ul li a:active nav ul li a:focus {
 	color: transparent;
 }
 
-.edit-container {
+.edit-button {
 	cursor: pointer;
+}
+
+/* Modal Header */
+/* The Modal (background) */
+.modal {
+	display: none;
+	position: fixed;
+	z-index: 1;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background: rgba(0, 0, 0, 0.4);
+	justify-content: center;
+	align-items: center;
+	overflow: auto;
+}
+
+/* Modal Content */
+.modal-content {
+	position: relative;
+	align-items: center;
+	margin: auto;
+	border-radius: 10px;
+	background: #FFFFFF;
+	width: 700px;
+}
+
+.close {
+	position: absolute;
+	top: 20px;
+	right: 30px;
+	color: black;
+	font-size: 28px;
+	font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+	color: #000;
+	text-decoration: none;
+	cursor: pointer;
+}
+
+.modal-header {
+	position: relative;
+	width: 100%;
+}
+
+.modal-header h2 {
+	display: flex;
+	justify-content: center;
+	font-family: "Work Sans";
+	font-weight: 400;
+	color: black;
+	padding-top: 60px;
+	font-size: 2rem;
+}
+
+.modal-body {
+	display: grid;
+	grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+	grid-column-gap: 10px;
+	grid-row-gap: 20px;
+	margin: 50px 100px 10px 100px;
+	padding-bottom: 50px;
+	border-bottom: #B3B3B3 1px solid;
+}
+
+.modal-body img {
+	width: 79px;
+	height: 105px;
+}
+
+.modal-footer {
+	display: flex;
+	justify-content: center;
+	width: 100%;
+}
+
+.modal-footer button {
+	width: 240px;
+	border-radius: 60px;
+	background-color: #1D6154;
+	font-size: 1rem;
+	color: white;
+	font-family: 'Syne', sans-serif;
+	padding: 10px;
+	cursor: pointer;
+	border: none;
+	font-weight: 700;
+	margin: 50px;
 }
 
 #loginForm {

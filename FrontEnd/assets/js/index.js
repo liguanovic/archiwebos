@@ -55,7 +55,6 @@ function addWorksToHTML(works) {
     figureElement.appendChild(imgElement);
     figureElement.appendChild(figcaptionElement);
     document.querySelector(".gallery").appendChild(figureElement);
-
   };
 }
 
@@ -115,7 +114,70 @@ function filterWorks(event) {
 }
 
 // ADMIN //
+function toggleLoginLogout() {
+  if (localStorage.getItem("token")) {
+    loginLink.textContent = "logout";
+    loginLink.href = "#";
+    loginLink.addEventListener("click", logoutHandler);
+  } else {
+    loginLink.textContent = "login";
+    loginLink.href = "login.html";
+    loginLink.removeEventListener("click", logoutHandler);
+  }
+}
 
+function logoutHandler(event) {
+  event.preventDefault();
+  localStorage.removeItem("token");
+  window.location.reload();
+}
+
+function addBanner() {
+  const banner = document.createElement("div");
+  banner.classList.add("banner");
+
+  const bannerContent = document.createElement("span");
+  const icon = document.createElement("i");
+
+  icon.classList.add("fas", "fa-pen-to-square");
+  bannerContent.appendChild(icon);
+  bannerContent.appendChild(document.createTextNode("Mode Création"));
+
+  banner.appendChild(bannerContent);
+  const firstChild = document.body.firstChild;
+  document.body.insertBefore(banner, firstChild);
+
+  console.log("Bannière ajoutée :", banner);
+  console.log("Icône ajoutée :", icon);
+}
+
+function addEditButton() {
+  const portfolioHeader = document.querySelector("#portfolio header");
+  const editButton = document.createElement("a");
+  const editContent = document.createElement("div");
+  const editIcon = document.createElement("i");
+
+  editButton.classList.add("edit-button");
+  editIcon.classList.add("fas", "fa-pen-to-square");
+
+  editContent.appendChild(editIcon);
+  editContent.insertAdjacentText('beforeend', "modifier");
+
+  portfolioHeader.appendChild(editButton);
+  editButton.appendChild(editContent);
+
+  addModalContent();
+
+  const modal = document.getElementById('myModal');
+  if (modal) {
+    editButton.onclick = function () {
+      modal.style.display = "block";
+      openModal();
+    }
+  } else {
+    console.error("Element modal introuvable !");
+  }
+}
 /**
  * Displays the admin interface if a token is present in local storage, otherwise fetches categories and adds filters.
  *
@@ -126,72 +188,110 @@ async function displayAdmin() {
 
   if (localStorage.getItem("token")) {
     // TODO : afficher le bouton de deconnexion + AFFICHER LA BANNER ADMIN + afficher le bouton modifier les projets
-
-    function toggleLoginLogout() {
-      if (localStorage.getItem("token")) {
-        loginLink.textContent = "logout";
-        loginLink.href = "#";
-        loginLink.addEventListener("click", logoutHandler);
-      } else {
-        loginLink.textContent = "login";
-        loginLink.href = "login.html";
-        loginLink.removeEventListener("click", logoutHandler);
-      }
-    }
-
-    function logoutHandler(event) {
-      event.preventDefault();
-      localStorage.removeItem("token");
-      window.location.reload();
-    }
-
-    function addBanner() {
-      const banner = document.createElement("div");
-      banner.classList.add("banner");
-  
-      const bannerContent = document.createElement("span"); 
-      const icon = document.createElement("i");
-      
-      icon.classList.add("fas", "fa-pen-to-square");
-      bannerContent.appendChild(icon);
-      bannerContent.appendChild(document.createTextNode("Mode Création")); 
-  
-      banner.appendChild(bannerContent); 
-      const firstChild = document.body.firstChild;
-      document.body.insertBefore(banner, firstChild);
-  
-      console.log("Bannière ajoutée :", banner);
-      console.log("Icône ajoutée :", icon);
-  }
-
-  function addEditButton() {
-    const portfolioHeader = document.querySelector("#portfolio header");
-    const editContainer = document.createElement("a");
-    const editContent = document.createElement("div"); 
-    const editIcon = document.createElement("i");
-
-    editContainer.classList.add("edit-container");
-    editIcon.classList.add("fas", "fa-pen-to-square");
-
-    editContent.appendChild(editIcon);
-    editContent.insertAdjacentText('beforeend', "modifier");
-
-    portfolioHeader.appendChild(editContainer);
-    editContainer.appendChild(editContent);
-
-    editContainer.addEventListener("click", () => {
-      window.location.href = "#";
-  });
-}
-  
     addBanner();
     addEditButton();
-
     toggleLoginLogout();
 
   } else {
     addFilters(categories);
   }
+}
+
+// MODAL //
+function addModalContent() {
+  const modal = document.createElement("div");
+  modal.classList.add("modal");
+  modal.id = "myModal";
+  document.body.appendChild(modal); 
+
+  const modalContent = document.createElement("div");
+  modalContent.classList.add("modal-content");
+
+  const modalHeader = document.createElement("div");
+  modalHeader.classList.add("modal-header");
+
+  const span = document.createElement("span");
+  span.classList.add("close");
+  span.innerHTML = "&times;";
+  const h2 = document.createElement("h2");
+  h2.textContent = "Galerie photos";
+
+  modalHeader.appendChild(span);
+  modalHeader.appendChild(h2);
+
+  const modalBody = document.createElement("div");
+  modalBody.classList.add("modal-body");
+
+  const modalFooter = document.createElement("div");
+  modalFooter.classList.add("modal-footer");
+
+  const modalButton = document.createElement("button");
+  modalButton.textContent = "Ajouter une photo";
+
+  modalFooter.appendChild(modalButton);
+
+  modalContent.appendChild(modalHeader);
+  modalContent.appendChild(modalBody);
+  modalContent.appendChild(modalFooter);
+
+  modal.appendChild(modalContent);
+}
+
+async function openModal() {
+  // Get the modal
+  const modal = document.getElementById("myModal");
+  const span = document.getElementsByClassName("close")[0];
+
+  modal.style.display = "flex";
+
+  // When the user clicks on <span> (x), close the modal
+  span.onclick = function () {
+    modal.style.display = "none";
+  }
+
+  // When the user clicks anywhere outside of the modal, close it
+  window.onclick = function (event) {
+    if (event.target == modal) {
+      modal.style.display = "none";
+    }
+  }
+
+  const works = await fetchWorks();
+  addWorksToModal(works);
+}
+
+function addWorksToModal(works) {
+  console.log("Ajout des projets au modal...");
+
+  const modalBody = document.querySelector(".modal-body");
+  modalBody.innerHTML = "";
+
+  for (const work of works) {
+    const figureElement = document.createElement("figure");
+    const imgElement = document.createElement("img");
+    const figcaptionElement = document.createElement("figcaption");
+
+    figureElement.id = work.categoryId;
+    imgElement.src = work.imageUrl;
+    imgElement.alt = work.title;
+
+    figureElement.appendChild(imgElement);
+    figureElement.appendChild(figcaptionElement);
+    modalBody.appendChild(figureElement);
+
+    // TODO : ajouter le bouton supprimer
+  };
+}
+
+
+
+function closeModal() {
+  const closeElement = document.querySelector();
+
+  closeElement.addEventListener("click", () => {
+    const modal = document.getElementById("myModal");
+    modal.remove();
+  })
 }
 
 // LOGOUT //
