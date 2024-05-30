@@ -169,6 +169,7 @@ function addEditButton() {
   const editIcon   = document.createElement("i");
 
   editIcon.classList.add("fas", "fa-pen-to-square");
+  editButton.classList.add("edit-button");
 
   editButton.appendChild(editIcon);
   editButton.insertAdjacentText('beforeend', "modifier");
@@ -203,39 +204,34 @@ async function displayAdmin() {
  */
 async function displayModal() {
   const modal = document.createElement("div");
-  modal.classList.add("modal");
-  modal.id = "myModal";
-  document.body.appendChild(modal);
-
-  const modalContent = document.createElement("div");
-  modalContent.classList.add("modal-content");
-
-  const modalHeader = document.createElement("div");
-  modalHeader.classList.add("modal-header");
-
-  const span = document.createElement("span");
-  span.classList.add("close");
-  span.innerHTML = "&times;";
+  const modalContent = document.createElement("section");
+  const modalHeader = document.createElement("header");
   const h2 = document.createElement("h2");
+  const span = document.createElement("span");
+  const ul = document.createElement("ul");
+  const button = document.createElement("button");
+
+  modal.classList.add("modal");
+  modalContent.classList.add("modal-section");
+  modalHeader.classList.add("modal-header");
+  span.classList.add("close");
+  ul.classList.add("modal-body");
+  button.classList.add("modal-btn");
+
+  modal.id = "myModal";
+  
   h2.textContent = "Galerie photos";
-
-  modalHeader.appendChild(span);
+  button.textContent = "Ajouter une photo";
+  span.innerHTML = "&times;";
+  
   modalHeader.appendChild(h2);
-
-  const modalBody = document.createElement("div");
-  modalBody.classList.add("modal-body");
-
-  const modalFooter = document.createElement("div");
-  modalFooter.classList.add("modal-footer");
-
-  const modalButton = document.createElement("button");
-  modalButton.textContent = "Ajouter une photo";
-
-  modalFooter.appendChild(modalButton);
+  modalHeader.appendChild(span);
   modalContent.appendChild(modalHeader);
-  modalContent.appendChild(modalBody);
-  modalContent.appendChild(modalFooter);
+  modalContent.appendChild(ul);
+  modalContent.appendChild(button);
   modal.appendChild(modalContent);
+
+  document.body.appendChild(modal);
 
   openModal();
 }
@@ -251,28 +247,36 @@ async function openModal() {
 
   modal.style.display = "flex";
 
-  /**
-   * Sets the onclick event handler for the span element to hide the modal.
-   *
-   * @param {Event} event - The click event.
-   */
-  span.onclick = function () {
-    modal.style.display = "none";
-  }
-
-    /**
-     * Sets the onclick event handler for the window to hide the modal if the clicked element is the modal itself.
-     *
-     * @param {Event} event - The click event.
-     */
-  window.onclick = function (event) {
-    if (event.target == modal) {
-      modal.style.display = "none";
-    }
-  }
-
   await fetchWorks();
   addWorksToModal();
+
+  span.addEventListener("click", closeModal);
+  window.addEventListener("click", closeModalIfOutside);
+}
+
+function closeModal() {
+  const modal = document.getElementById("myModal");
+  modal.style.display = "none";
+
+  clearModalContent();
+
+  const span = document.getElementsByClassName("close")[0];
+  span.removeEventListener("click", closeModal);
+  window.removeEventListener("click", closeModalIfOutside);
+}
+
+function closeModalIfOutside(event) {
+  const modal = document.getElementById("myModal");
+  if (event.target == modal) {
+    closeModal();
+  }
+}
+
+function clearModalContent() {
+  const modalBody = document.querySelector(".modal-body");
+  if (modalBody) {
+    modalBody.innerHTML = "";
+  }
 }
 
 /**
@@ -313,34 +317,34 @@ function addWorksToModal() {
  * @param {string} workId - The ID of the work to delete.
  * @return {Promise<void>} A promise that resolves when the work is successfully deleted, or rejects with an error if the deletion fails.
  */
-async function deleteWork(workId) {
-  console.log(workId);
-  try {
-    const response = await fetch(`http://localhost:5678/api/works/${workId}`, {
-      method: "DELETE",
-      headers: {
-        "Authorization": `Bearer ${localStorage.getItem("token")}`
-      }
-    });
+// async function deleteWork(workId) {
+//   console.log(workId);
+//   try {
+//     const response = await fetch(`http://localhost:5678/api/works/${workId}`, {
+//       method: "DELETE",
+//       headers: {
+//         "Authorization": `Bearer ${localStorage.getItem("token")}`
+//       }
+//     });
 
-    if (!response.ok) {
-      throw new Error("Failed to delete work");
-    }
+//     if (!response.ok) {
+//       throw new Error("Failed to delete work");
+//     }
 
-    console.log(`Work with ID ${workId} deleted successfully`);
-  } catch (error) {
-    console.error("Error during deletion:", error);
-  }
-}
+//     console.log(`Work with ID ${workId} deleted successfully`);
+//   } catch (error) {
+//     console.error("Error during deletion:", error);
+//   }
+// }
 
-document.querySelectorAll(".fa-trash-can").forEach(icon => {
-  console.log(icon);
-  icon.addEventListener("click", () => {
-    const workId = icon.closest(".image-container").id;
-    console.log(workId);
-    deleteWork(workId);
-  });
-});
+// document.querySelectorAll(".fa-trash-can").forEach(icon => {
+//   console.log(icon);
+//   icon.addEventListener("click", () => {
+//     const workId = icon.closest(".image-container").id;
+//     console.log(workId);
+//     deleteWork(workId);
+//   });
+// });
 
 // ? ********** LOGOUT ********** // 
 

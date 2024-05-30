@@ -362,7 +362,9 @@ nav ul li a:active nav ul li a:focus {
 }
 
 /* Modal Content */
-.modal-content {
+.modal-section {
+	display: flex;
+	flex-direction: column;
 	position: relative;
 	align-items: center;
 	margin: auto;
@@ -388,13 +390,12 @@ nav ul li a:active nav ul li a:focus {
 }
 
 .modal-header {
-	position: relative;
+	justify-content: center;
 	width: 100%;
 }
 
 .modal-header h2 {
 	display: flex;
-	justify-content: center;
 	font-family: "Work Sans";
 	font-weight: 400;
 	color: black;
@@ -428,13 +429,13 @@ nav ul li a:active nav ul li a:focus {
 	height: 105px;
 }
 
-.modal-footer {
+/* .modal-footer {
 	display: flex;
 	justify-content: center;
 	width: 100%;
-}
+} */
 
-.modal-footer button {
+.modal-btn {
 	width: 240px;
 	border-radius: 60px;
 	background-color: #1D6154;
@@ -445,7 +446,7 @@ nav ul li a:active nav ul li a:focus {
 	cursor: pointer;
 	border: none;
 	font-weight: 700;
-	margin: 50px;
+	margin: 50px 0;
 }
 
 .fa-trash-can {
