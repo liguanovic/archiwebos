@@ -331,19 +331,23 @@ function addWorksToModal() {
 //       throw new Error("Failed to delete work");
 //     }
 
+//     const workElement = document.querySelector(`[data-id="${workId}"]`).parentElement.parentElement;
+//     workElement.remove();
+
 //     console.log(`Work with ID ${workId} deleted successfully`);
 //   } catch (error) {
 //     console.error("Error during deletion:", error);
 //   }
 // }
 
-// document.querySelectorAll(".fa-trash-can").forEach(icon => {
-//   console.log(icon);
-//   icon.addEventListener("click", () => {
-//     const workId = icon.closest(".image-container").id;
-//     console.log(workId);
+// document.addEventListener("click", (event) => {
+//   const icon = event.target.closest(".fa-trash-can");
+//   if (icon) {
+//     const workContainer = icon.closest(".image-container").id;
+//     const workId = workContainer ? workContainer.id : null;
+//     if (workId) {}
 //     deleteWork(workId);
-//   });
+//   }
 // });
 
 // ? ********** LOGOUT ********** // 
