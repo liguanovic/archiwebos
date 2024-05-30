@@ -6,7 +6,7 @@ const URL = "http://localhost:5678/api/";
 
 // ***** VARIABLES ***** //
 let categories = [];
-
+let works = [];
 // ***** FUNCTIONS ***** //
 
 // FETCH // 
@@ -18,9 +18,7 @@ let categories = [];
  */
 async function fetchWorks() {
   const response = await fetch(URL + "works");
-  const works = await response.json();
-
-  return works;
+  works = await response.json();
 }
 
 /**
@@ -39,7 +37,6 @@ async function fetchCategories() {
  * @param {Array} works - An array of work objects containing properties like categoryId, imageUrl, and title.
  */
 function addWorksToHTML(works) {
-  console.log("Ajout des projets à la galerie...");
 
   for (const work of works) {
     const figureElement = document.createElement("figure");
@@ -141,14 +138,11 @@ function addBanner() {
 
   icon.classList.add("fas", "fa-pen-to-square");
   bannerContent.appendChild(icon);
-  bannerContent.appendChild(document.createTextNode("Mode Création"));
+  bannerContent.appendChild(document.createTextNode("Mode édition"));
 
   banner.appendChild(bannerContent);
   const firstChild = document.body.firstChild;
   document.body.insertBefore(banner, firstChild);
-
-  console.log("Bannière ajoutée :", banner);
-  console.log("Icône ajoutée :", icon);
 }
 
 function addEditButton() {
@@ -202,7 +196,7 @@ async function addModalContent() {
   const modal = document.createElement("div");
   modal.classList.add("modal");
   modal.id = "myModal";
-  document.body.appendChild(modal); 
+  document.body.appendChild(modal);
 
   const modalContent = document.createElement("div");
   modalContent.classList.add("modal-content");
@@ -236,29 +230,26 @@ async function addModalContent() {
 }
 
 async function openModal() {
-  // Get the modal
   const modal = document.getElementById("myModal");
   const span = document.getElementsByClassName("close")[0];
 
   modal.style.display = "flex";
 
-  // When the user clicks on <span> (x), close the modal
   span.onclick = function () {
     modal.style.display = "none";
   }
 
-  // When the user clicks anywhere outside of the modal, close it
   window.onclick = function (event) {
     if (event.target == modal) {
       modal.style.display = "none";
     }
   }
 
-  const works = await fetchWorks();
-  addWorksToModal(works);
+  await fetchWorks();
+  addWorksToModal();
 }
 
-function addWorksToModal(works) {
+function addWorksToModal() {
   console.log("Ajout des projets au modal...");
 
   const modalBody = document.querySelector(".modal-body");
@@ -269,9 +260,9 @@ function addWorksToModal(works) {
     const imgElement = document.createElement("img");
     const figcaptionElement = document.createElement("figcaption");
     const trashIcon = document.createElement("i");
-    
+
     trashIcon.classList.add("fa-solid", "fa-trash-can");
-    
+
 
     figureElement.id = work.categoryId;
     imgElement.src = work.imageUrl;
@@ -282,18 +273,38 @@ function addWorksToModal(works) {
     modalBody.appendChild(figureElement);
     figcaptionElement.appendChild(trashIcon);
 
-    // TODO : ajouter le bouton supprimer
-  };
+    // trashIcon.addEventListener("click", deleteWork(work.id, figureElement));
+  }
+};
+
+async function deleteWork(workId) {
+  console.log(workId);
+  try {
+    const response = await fetch(`http://localhost:5678/api/works/${workId}`, {
+      method: "DELETE",
+      headers: {
+        "Authorization": `Bearer ${localStorage.getItem("token")}`
+      }
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to delete work");
+    }
+
+    console.log(`Work with ID ${workId} deleted successfully`);
+  } catch (error) {
+    console.error("Error during deletion:", error);
+  }
 }
 
-function closeModal() {
-  const closeElement = document.querySelector();
-
-  closeElement.addEventListener("click", () => {
-    const modal = document.getElementById("myModal");
-    modal.remove();
-  })
-}
+document.querySelectorAll(".fa-trash-can").forEach(icon => {
+  console.log(icon);
+  icon.addEventListener("click", () => {
+    const workId = icon.closest(".image-container").id;
+    console.log(workId);
+    deleteWork(workId);
+  });
+});
 
 // LOGOUT //
 
@@ -313,8 +324,7 @@ function logout() {
  * @return {Promise<void>} A promise that resolves when the main function is completed.
  */
 async function main() {
-  const works = await fetchWorks();
-
+  await fetchWorks();
   await fetchCategories();
 
   addWorksToHTML(works);
