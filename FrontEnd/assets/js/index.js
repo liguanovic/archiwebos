@@ -1,15 +1,17 @@
 "use strict";
 
-// ***** CONSTANTS ***** //
+// ! ******************** CONSTANTS ******************** //
+
 const URL = "http://localhost:5678/api/";
 
+// ! ******************** VARIABLES ******************** //
 
-// ***** VARIABLES ***** //
 let categories = [];
 let works = [];
-// ***** FUNCTIONS ***** //
 
-// FETCH // 
+// ! ******************** FUNCTIONS ******************** //
+
+// ? ********** FETCH ********** // 
 
 /**
  * Fetches the works data from the server and returns it as a promise.
@@ -29,7 +31,7 @@ async function fetchCategories() {
   categories = await response.json();
 }
 
-// DISPLAY WORKS //
+// ? ********** DISPLAY WORKS ********** // 
 
 /**
  * Adds works to the HTML gallery.
@@ -55,7 +57,7 @@ function addWorksToHTML(works) {
   };
 }
 
-// FILTERS //
+// ? ********** FILTERS ********** // 
 
 /**
  * Adds filters to the DOM based on the given categories.
@@ -110,7 +112,11 @@ function filterWorks(event) {
   });
 }
 
-// ADMIN //
+// ? ********** ADMIN ********** // 
+
+/**
+ * Toggles the login/logout functionality based on the presence of a token in local storage.
+ */
 function toggleLoginLogout() {
   if (localStorage.getItem("token")) {
     loginLink.textContent = "logout";
@@ -123,12 +129,20 @@ function toggleLoginLogout() {
   }
 }
 
+/**
+ * Logout handler function.
+ *
+ * @param {Event} event - The event object triggered by the click.
+ */
 function logoutHandler(event) {
   event.preventDefault();
   localStorage.removeItem("token");
   window.location.reload();
 }
 
+/**
+ * Creates a banner element and adds it to the beginning of the document body.
+ */
 function addBanner() {
   const banner = document.createElement("div");
   banner.classList.add("banner");
@@ -145,33 +159,23 @@ function addBanner() {
   document.body.insertBefore(banner, firstChild);
 }
 
+/**
+ * Adds an edit button to the portfolio header, which, when clicked, opens a modal with the content of the modal being added by the `displayModal` function.
+ */
 function addEditButton() {
   const portfolioHeader = document.querySelector("#portfolio header");
-  const editButton = document.createElement("a");
-  const editContent = document.createElement("div");
-  const editIcon = document.createElement("i");
 
-  editButton.classList.add("edit-button");
+  const editButton = document.createElement("button");
+  const editIcon   = document.createElement("i");
+
   editIcon.classList.add("fas", "fa-pen-to-square");
 
-  editContent.appendChild(editIcon);
-  editContent.insertAdjacentText('beforeend', "modifier");
-
+  editButton.appendChild(editIcon);
+  editButton.insertAdjacentText('beforeend', "modifier");
+  editButton.addEventListener("click", displayModal);
   portfolioHeader.appendChild(editButton);
-  editButton.appendChild(editContent);
-
-  addModalContent();
-
-  const modal = document.getElementById('myModal');
-  if (modal) {
-    editButton.onclick = function () {
-      modal.style.display = "block";
-      openModal();
-    }
-  } else {
-    console.error("Element modal introuvable !");
-  }
 }
+
 /**
  * Displays the admin interface if a token is present in local storage, otherwise fetches categories and adds filters.
  *
@@ -181,7 +185,6 @@ async function displayAdmin() {
   const loginLink = document.getElementById('loginLink');
 
   if (localStorage.getItem("token")) {
-    // TODO : afficher le bouton de deconnexion + AFFICHER LA BANNER ADMIN + afficher le bouton modifier les projets
     addBanner();
     addEditButton();
     toggleLoginLogout();
@@ -191,8 +194,14 @@ async function displayAdmin() {
   }
 }
 
-// MODAL //
-async function addModalContent() {
+// ? ********** MODAL ********** // 
+
+/**
+ * Asynchronously adds a modal content to the document body.
+ *
+ * @return {Promise<void>} A promise that resolves when the modal content is added.
+ */
+async function displayModal() {
   const modal = document.createElement("div");
   modal.classList.add("modal");
   modal.id = "myModal";
@@ -227,18 +236,35 @@ async function addModalContent() {
   modalContent.appendChild(modalBody);
   modalContent.appendChild(modalFooter);
   modal.appendChild(modalContent);
+
+  openModal();
 }
 
+/**
+ * Asynchronously opens a modal and fetches works data to add to the modal.
+ *
+ * @return {Promise<void>} A promise that resolves when the modal is opened and works data is added to the modal.
+ */
 async function openModal() {
   const modal = document.getElementById("myModal");
   const span = document.getElementsByClassName("close")[0];
 
   modal.style.display = "flex";
 
+  /**
+   * Sets the onclick event handler for the span element to hide the modal.
+   *
+   * @param {Event} event - The click event.
+   */
   span.onclick = function () {
     modal.style.display = "none";
   }
 
+    /**
+     * Sets the onclick event handler for the window to hide the modal if the clicked element is the modal itself.
+     *
+     * @param {Event} event - The click event.
+     */
   window.onclick = function (event) {
     if (event.target == modal) {
       modal.style.display = "none";
@@ -249,6 +275,10 @@ async function openModal() {
   addWorksToModal();
 }
 
+/**
+ * Adds works to the modal by creating figure, img, figcaption, and trashIcon elements,
+ * and appending them to the modal body. The function logs a message to the console.
+ */
 function addWorksToModal() {
   console.log("Ajout des projets au modal...");
 
@@ -277,6 +307,12 @@ function addWorksToModal() {
   }
 };
 
+/**
+ * Deletes a work with the specified ID from the API.
+ *
+ * @param {string} workId - The ID of the work to delete.
+ * @return {Promise<void>} A promise that resolves when the work is successfully deleted, or rejects with an error if the deletion fails.
+ */
 async function deleteWork(workId) {
   console.log(workId);
   try {
@@ -306,7 +342,7 @@ document.querySelectorAll(".fa-trash-can").forEach(icon => {
   });
 });
 
-// LOGOUT //
+// ? ********** LOGOUT ********** // 
 
 /**
  * Logs out the user by removing the token from local storage and reloading the page.
@@ -316,7 +352,7 @@ function logout() {
   window.location.reload;
 }
 
-// MAIN //
+// ? ********** MAIN ********** // 
 
 /**
  * Executes the main function.
