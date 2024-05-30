@@ -412,6 +412,16 @@ nav ul li a:active nav ul li a:focus {
 	border-bottom: #B3B3B3 1px solid;
 }
 
+.modal figure {
+	position: relative;
+}
+
+.modal figcaption {
+	position: absolute;
+	right: 20px;
+    top: 5px;
+}
+
 .modal-body img {
 	width: 79px;
 	height: 105px;
@@ -435,6 +445,14 @@ nav ul li a:active nav ul li a:focus {
 	border: none;
 	font-weight: 700;
 	margin: 50px;
+}
+
+.fa-trash-can {
+	color: #FFFFFF;
+    background-color: #000000;
+    padding: 4px;
+    font-size: 0.8rem;
+    position: relative;
 }
 
 #loginForm {

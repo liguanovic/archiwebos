@@ -198,7 +198,7 @@ async function displayAdmin() {
 }
 
 // MODAL //
-function addModalContent() {
+async function addModalContent() {
   const modal = document.createElement("div");
   modal.classList.add("modal");
   modal.id = "myModal";
@@ -229,11 +229,9 @@ function addModalContent() {
   modalButton.textContent = "Ajouter une photo";
 
   modalFooter.appendChild(modalButton);
-
   modalContent.appendChild(modalHeader);
   modalContent.appendChild(modalBody);
   modalContent.appendChild(modalFooter);
-
   modal.appendChild(modalContent);
 }
 
@@ -270,6 +268,10 @@ function addWorksToModal(works) {
     const figureElement = document.createElement("figure");
     const imgElement = document.createElement("img");
     const figcaptionElement = document.createElement("figcaption");
+    const trashIcon = document.createElement("i");
+    
+    trashIcon.classList.add("fa-solid", "fa-trash-can");
+    
 
     figureElement.id = work.categoryId;
     imgElement.src = work.imageUrl;
@@ -278,12 +280,11 @@ function addWorksToModal(works) {
     figureElement.appendChild(imgElement);
     figureElement.appendChild(figcaptionElement);
     modalBody.appendChild(figureElement);
+    figcaptionElement.appendChild(trashIcon);
 
     // TODO : ajouter le bouton supprimer
   };
 }
-
-
 
 function closeModal() {
   const closeElement = document.querySelector();
