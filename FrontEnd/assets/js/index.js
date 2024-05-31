@@ -307,7 +307,7 @@ function addWorksToModal() {
     modalBody.appendChild(figureElement);
     figcaptionElement.appendChild(trashIcon);
 
-    // trashIcon.addEventListener("click", deleteWork(work.id, figureElement));
+    trashIcon.addEventListener("click", deleteWork(work.id, figureElement));
   }
 };
 
@@ -317,38 +317,29 @@ function addWorksToModal() {
  * @param {string} workId - The ID of the work to delete.
  * @return {Promise<void>} A promise that resolves when the work is successfully deleted, or rejects with an error if the deletion fails.
  */
-// async function deleteWork(workId) {
-//   console.log(workId);
-//   try {
-//     const response = await fetch(`http://localhost:5678/api/works/${workId}`, {
-//       method: "DELETE",
-//       headers: {
-//         "Authorization": `Bearer ${localStorage.getItem("token")}`
-//       }
-//     });
+function deleteWork(id, img) {
+  return async (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    try {
+      const response = await fetch("http://localhost:5678/api/works/" + id, {
+        method: "DELETE",
+        headers: {
+          accept: '*/*',
+          "Authorization": `Bearer ${localStorage.getItem("token")}`
+        }
+      });
+      if (!response.ok) {
+        throw new Error("something went wrong");
+      }
+      img.remove();
+    } catch (error) {
+      console.error("an error occurred during photo deletion:", error);
+    }
+  }
+}
 
-//     if (!response.ok) {
-//       throw new Error("Failed to delete work");
-//     }
 
-//     const workElement = document.querySelector(`[data-id="${workId}"]`).parentElement.parentElement;
-//     workElement.remove();
-
-//     console.log(`Work with ID ${workId} deleted successfully`);
-//   } catch (error) {
-//     console.error("Error during deletion:", error);
-//   }
-// }
-
-// document.addEventListener("click", (event) => {
-//   const icon = event.target.closest(".fa-trash-can");
-//   if (icon) {
-//     const workContainer = icon.closest(".image-container").id;
-//     const workId = workContainer ? workContainer.id : null;
-//     if (workId) {}
-//     deleteWork(workId);
-//   }
-// });
 
 // ? ********** LOGOUT ********** // 
 
