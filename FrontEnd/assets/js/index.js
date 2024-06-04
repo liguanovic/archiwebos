@@ -263,6 +263,8 @@ function closeModal() {
   const span = document.getElementsByClassName("close")[0];
   span.removeEventListener("click", closeModal);
   window.removeEventListener("click", closeModalIfOutside);
+
+  reloadWorks();
 }
 
 function closeModalIfOutside(event) {
@@ -324,7 +326,13 @@ function AddsecondModal() {
     addPictureBtn.style.display = "none";
   }
 
-  const modalContent    = document.querySelector(".modal-section");
+  let modalContent = document.querySelector(".modal-section");
+
+  const oldSecondModal = document.querySelector(".second-modal");
+  if (oldSecondModal) {
+    oldSecondModal.remove();
+  }
+
   const h2              = document.querySelector(".modal-header h2");
   const form            = document.createElement("form");
   const addWorks        = document.createElement("div");
@@ -338,15 +346,22 @@ function AddsecondModal() {
   const categorieLabel  = document.createElement("label");
   const submitInput     = document.createElement("input");
   const line            = document.createElement("hr");
-  const arrowLeft       = document.createElement("i");
+  let arrowLeft         = document.querySelector(".fa-arrow-left");
+
+  if (!arrowLeft) {
+    arrowLeft = document.createElement("i");
+    arrowLeft.classList.add("fa-solid", "fa-arrow-left");
+    modalContent.appendChild(arrowLeft);
+  }
+
+  arrowLeft.style.display = "none";
 
   h2.innerText = "Ajout photo";
   addWorksText.innerText = "jpg, png : 4mo max";
-  form.classList.add("modal-form");
+  form.classList.add("modal-form", "second-modal");
   addWorks.classList.add("add-works");
   iconImage.classList.add("fa-regular", "fa-image");
   submitInput.classList.add("form-btn");
-  arrowLeft.classList.add("fa-solid", "fa-arrow-left");
 
   imgInput.type              = "file";
   imgInput.id                = "image";
@@ -368,8 +383,6 @@ function AddsecondModal() {
   submitInput.type           = "submit";
   submitInput.value          = "Valider";
 
-  modalContent.appendChild(form);
-  modalContent.appendChild(arrowLeft);
   form.appendChild(addWorks);
   addWorks.appendChild(iconImage);
   addWorks.appendChild(imgLabel);
@@ -382,35 +395,46 @@ function AddsecondModal() {
   form.appendChild(line);
   form.appendChild(submitInput);
 
+  modalContent.appendChild(form);
+
+  modalContent.classList.add("second-modal-active");
+
+  arrowLeft.style.display = "block";
+  
   previousModal();
   imgInput.addEventListener("change", previewImage);
 }
+
 
 function previousModal() {
   const arrowElement = document.querySelector(".fa-arrow-left");
 
   arrowElement.addEventListener("click", () => {
-    const secondModalContent = document.querySelector(".modal-form");
-    if (secondModalContent) {
-      secondModalContent.style.display = "none";
-    }
+    const modalContent = document.querySelector(".modal-section");
+    
+    if (modalContent.classList.contains("second-modal-active")) {
+      const secondModalContent = document.querySelector(".modal-form.second-modal");
+      if (secondModalContent) {
+        secondModalContent.style.display = "none";
+        secondModalContent.remove();
+      }
 
-    const secondModalBtn = document.querySelector(".form-btn");
-    if (secondModalBtn) {
-      secondModalBtn.style.display = "none";
-    }
+      const firstModalContent = document.querySelector(".modal-body");
+      if (firstModalContent) {
+        firstModalContent.style.display = "";
+      }
 
-    const firstModalContent = document.querySelector(".modal-body");
-    if (firstModalContent) {
-      firstModalContent.style.display = "";
-    }
+      const addPictureBtn = document.querySelector(".modal-btn");
+      if (addPictureBtn) {
+        addPictureBtn.style.display = "";
+      }
 
-    const addPictureBtn = document.querySelector(".modal-btn");
-    if (addPictureBtn) {
-      addPictureBtn.style.display = "";
+      modalContent.classList.remove("second-modal-active");
+
+      arrowElement.style.display = "none";
     }
   });
-  }
+}
 
 /**
  * Deletes a work with the specified ID from the API.
@@ -435,10 +459,18 @@ function deleteWork(id, img) {
       }
       
       img.remove();
+      await reloadWorks();
     } catch (error) {
       console.error("an error occurred during photo deletion:", error);
     }
   }
+}
+
+async function reloadWorks() {
+  await fetchWorks(); 
+  const gallery = document.querySelector(".gallery");
+  gallery.innerHTML = "";
+  addWorksToHTML(works);
 }
 
 async function postWorks(e) {
