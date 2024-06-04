@@ -20,7 +20,7 @@ let works = [];
  */
 async function fetchWorks() {
   const response = await fetch(URL + "works");
-  works = await response.json();
+  works          = await response.json();
 }
 
 /**
@@ -28,7 +28,7 @@ async function fetchWorks() {
  */
 async function fetchCategories() {
   const response = await fetch(URL + "categories");
-  categories = await response.json();
+  categories     = await response.json();
 }
 
 // ? ********** DISPLAY WORKS ********** // 
@@ -41,15 +41,15 @@ async function fetchCategories() {
 function addWorksToHTML(works) {
 
   for (const work of works) {
-    const figureElement = document.createElement("figure");
-    const imgElement = document.createElement("img");
+    const figureElement     = document.createElement("figure");
+    const imgElement        = document.createElement("img");
     const figcaptionElement = document.createElement("figcaption");
 
-    figureElement.id = work.categoryId;
-    figureElement.classList.add("works");
-    imgElement.src = work.imageUrl;
-    imgElement.alt = work.title;
+    figureElement.id            = work.categoryId;
+    imgElement.src              = work.imageUrl;
+    imgElement.alt              = work.title;
     figcaptionElement.innerText = work.title;
+    figureElement.classList.add("works");
 
     figureElement.appendChild(imgElement);
     figureElement.appendChild(figcaptionElement);
@@ -67,8 +67,8 @@ function addWorksToHTML(works) {
 function addFilters(categories) {
   const categoriesContainer = document.querySelector(".filters");
 
-  const allButton = document.createElement("button");
-  allButton.id = "all";
+  const allButton     = document.createElement("button");
+  allButton.id        = "all";
   allButton.innerText = "Tous";
   allButton.classList.add("filters");
 
@@ -77,10 +77,10 @@ function addFilters(categories) {
   categoriesContainer.appendChild(allLi);
 
   for (const category of categories) {
-    const li = document.createElement("li");
+    const li     = document.createElement("li");
     const filter = document.createElement("button");
 
-    filter.id = category.id;
+    filter.id        = category.id;
     filter.innerText = category.name;
     filter.classList.add("filters");
 
@@ -148,7 +148,7 @@ function addBanner() {
   banner.classList.add("banner");
 
   const bannerContent = document.createElement("span");
-  const icon = document.createElement("i");
+  const icon          = document.createElement("i");
 
   icon.classList.add("fas", "fa-pen-to-square");
   bannerContent.appendChild(icon);
@@ -164,9 +164,8 @@ function addBanner() {
  */
 function addEditButton() {
   const portfolioHeader = document.querySelector("#portfolio header");
-
-  const editButton = document.createElement("button");
-  const editIcon   = document.createElement("i");
+  const editButton      = document.createElement("button");
+  const editIcon        = document.createElement("i");
 
   editIcon.classList.add("fas", "fa-pen-to-square");
   editButton.classList.add("edit-button");
@@ -203,13 +202,13 @@ async function displayAdmin() {
  * @return {Promise<void>} A promise that resolves when the modal content is added.
  */
 async function displayModal() {
-  const modal = document.createElement("div");
+  const modal        = document.createElement("div");
   const modalContent = document.createElement("section");
-  const modalHeader = document.createElement("header");
-  const h2 = document.createElement("h2");
-  const span = document.createElement("span");
-  const ul = document.createElement("ul");
-  const button = document.createElement("button");
+  const modalHeader  = document.createElement("header");
+  const h2           = document.createElement("h2");
+  const span         = document.createElement("span");
+  const ul           = document.createElement("ul");
+  const button       = document.createElement("button");
 
   modal.classList.add("modal");
   modalContent.classList.add("modal-section");
@@ -218,11 +217,10 @@ async function displayModal() {
   ul.classList.add("modal-body");
   button.classList.add("modal-btn");
 
-  modal.id = "myModal";
-  
-  h2.textContent = "Galerie photos";
+  modal.id           = "myModal";
+  h2.textContent     = "Galerie photos";
   button.textContent = "Ajouter une photo";
-  span.innerHTML = "&times;";
+  span.innerHTML     = "&times;";
   
   modalHeader.appendChild(h2);
   modalHeader.appendChild(span);
@@ -232,6 +230,8 @@ async function displayModal() {
   modal.appendChild(modalContent);
 
   document.body.appendChild(modal);
+
+  button.addEventListener("click", AddsecondModal);
 
   openModal();
 }
@@ -243,7 +243,7 @@ async function displayModal() {
  */
 async function openModal() {
   const modal = document.getElementById("myModal");
-  const span = document.getElementsByClassName("close")[0];
+  const span  = document.getElementsByClassName("close")[0];
 
   modal.style.display = "flex";
 
@@ -255,7 +255,7 @@ async function openModal() {
 }
 
 function closeModal() {
-  const modal = document.getElementById("myModal");
+  const modal         = document.getElementById("myModal");
   modal.style.display = "none";
 
   clearModalContent();
@@ -274,6 +274,7 @@ function closeModalIfOutside(event) {
 
 function clearModalContent() {
   const modalBody = document.querySelector(".modal-body");
+
   if (modalBody) {
     modalBody.innerHTML = "";
   }
@@ -290,17 +291,17 @@ function addWorksToModal() {
   modalBody.innerHTML = "";
 
   for (const work of works) {
-    const figureElement = document.createElement("figure");
-    const imgElement = document.createElement("img");
+    const figureElement     = document.createElement("figure");
+    const imgElement        = document.createElement("img");
     const figcaptionElement = document.createElement("figcaption");
-    const trashIcon = document.createElement("i");
+    const trashIcon         = document.createElement("i");
 
     trashIcon.classList.add("fa-solid", "fa-trash-can");
 
 
     figureElement.id = work.categoryId;
-    imgElement.src = work.imageUrl;
-    imgElement.alt = work.title;
+    imgElement.src   = work.imageUrl;
+    imgElement.alt   = work.title;
 
     figureElement.appendChild(imgElement);
     figureElement.appendChild(figcaptionElement);
@@ -310,6 +311,106 @@ function addWorksToModal() {
     trashIcon.addEventListener("click", deleteWork(work.id, figureElement));
   }
 };
+
+
+function AddsecondModal() {
+  const firstModalContent = document.querySelector(".modal-body");
+  if (firstModalContent) {
+    firstModalContent.style.display = "none";
+  }
+
+  const addPictureBtn = document.querySelector(".modal-btn");
+  if (addPictureBtn) {
+    addPictureBtn.style.display = "none";
+  }
+
+  const modalContent    = document.querySelector(".modal-section");
+  const h2              = document.querySelector(".modal-header h2");
+  const form            = document.createElement("form");
+  const addWorks        = document.createElement("div");
+  const iconImage       = document.createElement("i");
+  const imgLabel        = document.createElement("label");
+  const imgInput        = document.createElement("input");
+  const addWorksText    = document.createElement("p");
+  const titleInput      = document.createElement("input");
+  const titleLabel      = document.createElement("label");
+  const categorieSelect = document.createElement("select");
+  const categorieLabel  = document.createElement("label");
+  const submitInput     = document.createElement("input");
+  const line            = document.createElement("hr");
+  const arrowLeft       = document.createElement("i");
+
+  h2.innerText = "Ajout photo";
+  addWorksText.innerText = "jpg, png : 4mo max";
+  form.classList.add("modal-form");
+  addWorks.classList.add("add-works");
+  iconImage.classList.add("fa-regular", "fa-image");
+  submitInput.classList.add("form-btn");
+  arrowLeft.classList.add("fa-solid", "fa-arrow-left");
+
+  imgInput.type              = "file";
+  imgInput.id                = "image";
+  imgInput.accept            = ".jpg, .jpeg, .png";
+  imgLabel.textContent       = "+ Ajouter photo";
+  imgLabel.htmlFor           = "image";
+  titleInput.type            = "text";
+  titleInput.id              = "title-input";
+  titleLabel.textContent     = "Titre";
+  titleLabel.htmlFor         = "title";
+  categorieSelect.id         = "category-input";
+  categorieSelect.name       = "category";
+  categorieSelect.innerHTML  = `<option value="" disabled hidden selected></option>
+                                <option value="1">Objets</option>
+                                <option value="2">Appartements</option>
+                                <option value="3">Hôtels & restaurants</option>`;
+  categorieLabel.textContent = "Categorie";
+  categorieLabel.htmlFor     = "category-input";
+  submitInput.type           = "submit";
+  submitInput.value          = "Valider";
+
+  modalContent.appendChild(form);
+  modalContent.appendChild(arrowLeft);
+  form.appendChild(addWorks);
+  addWorks.appendChild(iconImage);
+  addWorks.appendChild(imgLabel);
+  addWorks.appendChild(imgInput);
+  addWorks.appendChild(addWorksText);
+  form.appendChild(titleLabel);
+  form.appendChild(titleInput);
+  form.appendChild(categorieLabel);
+  form.appendChild(categorieSelect);
+  form.appendChild(line);
+  form.appendChild(submitInput);
+
+  previousModal();
+  imgInput.addEventListener("change", previewImage);
+}
+
+function previousModal() {
+  const arrowElement = document.querySelector(".fa-arrow-left");
+
+  arrowElement.addEventListener("click", () => {
+    const secondModalContent = document.querySelector(".modal-form");
+    if (secondModalContent) {
+      secondModalContent.style.display = "none";
+    }
+
+    const secondModalBtn = document.querySelector(".form-btn");
+    if (secondModalBtn) {
+      secondModalBtn.style.display = "none";
+    }
+
+    const firstModalContent = document.querySelector(".modal-body");
+    if (firstModalContent) {
+      firstModalContent.style.display = "";
+    }
+
+    const addPictureBtn = document.querySelector(".modal-btn");
+    if (addPictureBtn) {
+      addPictureBtn.style.display = "";
+    }
+  });
+  }
 
 /**
  * Deletes a work with the specified ID from the API.
@@ -332,6 +433,7 @@ function deleteWork(id, img) {
       if (!response.ok) {
         throw new Error("something went wrong");
       }
+      
       img.remove();
     } catch (error) {
       console.error("an error occurred during photo deletion:", error);
@@ -339,7 +441,73 @@ function deleteWork(id, img) {
   }
 }
 
+async function postWorks(e) {
+  e.preventDefault();
+  const titleInput = document.getElementById("title-input");
+  const categoryInput = document.getElementById("category-input");
+  const imageInput = document.getElementById("image");
 
+  if (!titleInput.value || !categoryInput.value || !imageInput.files || !imageInput.files[0]) {
+    alert("Veuillez remplir tous les champs du formulaire");
+    return;
+  }
+
+  const formData = new FormData();
+  formData.append("title", titleInput.value);
+  formData.append("category", categoryInput.value);
+  formData.append("image", imageInput.files[0]);
+
+  try {
+    const response = await fetch("http://localhost:5678/api/works", {
+      method: "POST",
+      body: formData,
+      headers: {
+        accept: '*/*',
+        "Authorization": `Bearer ${localStorage.getItem("token")}`
+      }
+    });
+
+    if (response.ok) {
+      closeModal();
+      await fetchWorks(); 
+      addWorksToHTML(works);
+      alert("Le projet a été ajouté avec succès !");
+    } else {
+      throw new Error("Une erreur est survenue lors de l'envoi du formulaire");
+    }
+  } catch (error) {
+    console.error("Erreur lors de l'envoi du formulaire :", error);
+    alert("Une erreur est survenue lors de l'envoi du formulaire");
+  }
+}
+
+function previewImage() {
+  const preview = document.querySelector(".add-works");
+  const input = document.querySelector("#image");
+  const iconImage = document.querySelector(".fa-image");
+  const previewLabel = document.querySelector(".add-works label");
+  const previewParag = document.querySelector(".add-works p");
+
+  const Files = input.files;
+
+  previewLabel.remove();
+  previewParag.remove();
+  iconImage.remove();
+
+  for (const file of Files) {
+    const imgContainer = document.createElement("figure");
+    const image = document.createElement("img");
+
+    const reader = new FileReader();
+    reader.onload = function(event) {
+      image.src = event.target.result;
+    };
+    reader.readAsDataURL(file);
+
+    preview.appendChild(imgContainer);
+    imgContainer.appendChild(image);
+  }
+}
 
 // ? ********** LOGOUT ********** // 
 

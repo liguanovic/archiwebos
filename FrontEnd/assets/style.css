@@ -214,15 +214,9 @@ nav a {
 }
 
 li:hover {
-	color: #B1663C;
-}
-
-nav ul li a:visited {
-	font-weight: bold;
-}
-
-nav ul li a:active nav ul li a:focus {
-	font-weight: 700;
+	color: black;
+	cursor: pointer;
+	font-size: 1rem;
 }
 
 #introduction {
@@ -399,7 +393,6 @@ nav ul li a:active nav ul li a:focus {
 	font-family: "Work Sans";
 	font-weight: 400;
 	color: black;
-	padding-top: 60px;
 	font-size: 2rem;
 }
 
@@ -420,7 +413,7 @@ nav ul li a:active nav ul li a:focus {
 .modal figcaption {
 	position: absolute;
 	right: 5px;
-    top: 5px;
+	top: 5px;
 	cursor: pointer;
 }
 
@@ -443,12 +436,112 @@ nav ul li a:active nav ul li a:focus {
 	margin: 50px 0;
 }
 
+.modal-btn:hover {
+	background-color: #0E2F28;
+}
+
 .fa-trash-can {
 	color: #FFFFFF;
-    background-color: #000000;
-    padding: 4px;
-    font-size: 0.8rem;
-    position: relative;
+	background-color: #000000;
+	padding: 4px;
+	font-size: 0.8rem;
+	position: relative;
+}
+
+.fa-arrow-left {
+	position: absolute;
+	top: 20px;
+	left: 30px;
+	color: black;
+	font-size: 1.6rem;
+	cursor: pointer;
+}
+
+.add-works {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	gap: 6px;
+	width: 420px;
+	height: 169px;
+	margin-bottom: 30px;
+	background-color: #E8F1F6;
+	border-radius: 5px;
+	margin-top: 40px;
+}
+
+.add-works p {
+	font-size: 0.7rem;
+}
+
+.add-works label {
+	padding: 10px 30px;
+	border-radius: 50px;
+	color: #306685;
+	background-color: #B9C5CC;
+	cursor: pointer;
+}
+
+.add-works input {
+	display: none;
+}
+
+.add-works figure {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 10px;
+}
+
+.add-works figure img {
+	width: 114px;
+	height: 140px;
+}
+
+.fa-image {
+	color: #B9C5CC;
+	font-size: 5rem;
+}
+
+.modal-form {
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+}
+
+.modal-form input {
+	margin-bottom: 20px;
+}
+
+input.form-btn {
+	cursor: pointer;
+}
+
+input.form-btn:hover {
+	background-color: #0E2F28;
+}
+
+.modal-form select {
+	color: #6C6C6C;
+}
+
+.modal-form input,
+.modal-form select {
+	height: 50px;
+	font-size: 1.2em;
+	border: none;
+	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
+	background-color: #FFFFFF;
+}
+
+.modal-form hr {
+	width: 100%;
+	border: 0;
+	height: 0;
+	border-top: 1px solid #B3B3B3;
+	margin-top: 40px;
+	margin-bottom: 0;
 }
 
 #loginForm {
@@ -498,7 +591,12 @@ nav ul li a:active nav ul li a:focus {
 	height: 50px;
 	font-size: 1.2em;
 	border: none;
-	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
+	box-shadow
+	: 0px 4px 14px rgba(0, 0, 0, 0.09);
+}
+
+#submit:hover {
+	background-color: #0E2F28;
 }
 
 #contact label,
@@ -509,6 +607,10 @@ nav ul li a:active nav ul li a:focus {
 #contact textarea {
 	border: none;
 	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
+}
+
+#btn-form:hover {
+	background-color: #0E2F28;
 }
 
 input[type="submit"] {
