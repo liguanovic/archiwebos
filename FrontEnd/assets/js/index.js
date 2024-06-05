@@ -210,6 +210,8 @@ async function displayModal() {
   const ul           = document.createElement("ul");
   const button       = document.createElement("button");
 
+  modalContent.innerHTML = "";
+
   modal.classList.add("modal");
   modalContent.classList.add("modal-section");
   modalHeader.classList.add("modal-header");
@@ -254,19 +256,19 @@ async function openModal() {
   window.addEventListener("click", closeModalIfOutside);
 }
 
+/**
+ * Closes the modal by removing it from the DOM.
+ */
 function closeModal() {
-  const modal         = document.getElementById("myModal");
-  modal.style.display = "none";
-
-  clearModalContent();
-
-  const span = document.getElementsByClassName("close")[0];
-  span.removeEventListener("click", closeModal);
-  window.removeEventListener("click", closeModalIfOutside);
-
-  reloadWorks();
+  const modal = document.getElementById("myModal");
+  modal.remove();
 }
 
+/**
+ * Closes the modal if the click event occurs outside of it.
+ *
+ * @param {Event} event - The click event.
+ */
 function closeModalIfOutside(event) {
   const modal = document.getElementById("myModal");
   if (event.target == modal) {
@@ -274,11 +276,24 @@ function closeModalIfOutside(event) {
   }
 }
 
-function clearModalContent() {
-  const modalBody = document.querySelector(".modal-body");
+/**
+ * Resets the modal by clearing the values of the title input, category select, and image input.
+ */
+function resetModal() {
+  const titleInput = document.getElementById("title-input");
+  const categoryInput = document.getElementById("category-input");
+  const imageInput = document.getElementById("image");
 
-  if (modalBody) {
-    modalBody.innerHTML = "";
+  console.log("Title input:", titleInput);
+  console.log("Category input:", categoryInput);
+  console.log("Image input:", imageInput);
+
+  if (titleInput && categoryInput && imageInput) {
+    titleInput.value = "";
+    categoryInput.selectedIndex = 0;
+    imageInput.value = "";
+  } else {
+    console.error("One or more modal elements not found.");
   }
 }
 
@@ -287,8 +302,6 @@ function clearModalContent() {
  * and appending them to the modal body. The function logs a message to the console.
  */
 function addWorksToModal() {
-  console.log("Ajout des projets au modal...");
-
   const modalBody     = document.querySelector(".modal-body");
   modalBody.innerHTML = "";
 
@@ -314,7 +327,9 @@ function addWorksToModal() {
   }
 };
 
-
+/**
+ * Adds a second modal to the page, which allows the user to add a photo with a title and category.
+ */
 function AddsecondModal() {
   const firstModalContent = document.querySelector(".modal-body");
   if (firstModalContent) {
@@ -407,7 +422,9 @@ function AddsecondModal() {
   imgInput.addEventListener("change", previewImage);
 }
 
-
+/**
+ * Handles the click event on the previous modal button. Hides the second modal, shows the first modal, and removes the second modal if it exists.
+ */
 function previousModal() {
   const arrowElement = document.querySelector(".fa-arrow-left");
 
@@ -467,6 +484,11 @@ function deleteWork(id, img) {
   }
 }
 
+/**
+ * Reloads the works by fetching them from the server, clearing the gallery, and adding the works to the HTML.
+ *
+ * @return {Promise<void>} A promise that resolves when the works are reloaded.
+ */
 async function reloadWorks() {
   await fetchWorks(); 
   const gallery = document.querySelector(".gallery");
@@ -474,6 +496,12 @@ async function reloadWorks() {
   addWorksToHTML(works);
 }
 
+/**
+ * Asynchronously posts works to the server.
+ *
+ * @param {Event} e - The event object.
+ * @return {Promise<void>} A promise that resolves when the works are posted successfully or rejects with an error message.
+ */
 async function postWorks(e) {
   e.preventDefault();
   const titleInput    = document.getElementById("title-input");
@@ -501,7 +529,7 @@ async function postWorks(e) {
 
     if (response.ok) {
       closeModal();
-      await fetchWorks();
+      await reloadWorks();
       alert("Le projet a été ajouté avec succès !");
     } else {
       throw new Error("Une erreur est survenue lors de l'envoi du formulaire");
@@ -511,6 +539,9 @@ async function postWorks(e) {
   }
 }
 
+/**
+ * Previews an image by displaying it in the ".add-works" container.
+ */
 function previewImage() {
   const preview      = document.querySelector(".add-works");
   const input        = document.querySelector("#image");
