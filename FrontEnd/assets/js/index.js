@@ -289,7 +289,7 @@ function clearModalContent() {
 function addWorksToModal() {
   console.log("Ajout des projets au modal...");
 
-  const modalBody = document.querySelector(".modal-body");
+  const modalBody     = document.querySelector(".modal-body");
   modalBody.innerHTML = "";
 
   for (const work of works) {
@@ -400,6 +400,8 @@ function AddsecondModal() {
   modalContent.classList.add("second-modal-active");
 
   arrowLeft.style.display = "block";
+
+  form.addEventListener('submit', postWorks);
   
   previousModal();
   imgInput.addEventListener("change", previewImage);
@@ -430,7 +432,6 @@ function previousModal() {
       }
 
       modalContent.classList.remove("second-modal-active");
-
       arrowElement.style.display = "none";
     }
   });
@@ -475,9 +476,9 @@ async function reloadWorks() {
 
 async function postWorks(e) {
   e.preventDefault();
-  const titleInput = document.getElementById("title-input");
+  const titleInput    = document.getElementById("title-input");
   const categoryInput = document.getElementById("category-input");
-  const imageInput = document.getElementById("image");
+  const imageInput    = document.getElementById("image");
 
   if (!titleInput.value || !categoryInput.value || !imageInput.files || !imageInput.files[0]) {
     alert("Veuillez remplir tous les champs du formulaire");
@@ -486,7 +487,7 @@ async function postWorks(e) {
 
   const formData = new FormData();
   formData.append("title", titleInput.value);
-  formData.append("category", categoryInput.value);
+  formData.append("category", parseInt(categoryInput.value, 10)); 
   formData.append("image", imageInput.files[0]);
 
   try {
@@ -494,29 +495,26 @@ async function postWorks(e) {
       method: "POST",
       body: formData,
       headers: {
-        accept: '*/*',
         "Authorization": `Bearer ${localStorage.getItem("token")}`
       }
     });
 
     if (response.ok) {
       closeModal();
-      await fetchWorks(); 
-      addWorksToHTML(works);
+      await fetchWorks();
       alert("Le projet a été ajouté avec succès !");
     } else {
       throw new Error("Une erreur est survenue lors de l'envoi du formulaire");
     }
   } catch (error) {
-    console.error("Erreur lors de l'envoi du formulaire :", error);
     alert("Une erreur est survenue lors de l'envoi du formulaire");
   }
 }
 
 function previewImage() {
-  const preview = document.querySelector(".add-works");
-  const input = document.querySelector("#image");
-  const iconImage = document.querySelector(".fa-image");
+  const preview      = document.querySelector(".add-works");
+  const input        = document.querySelector("#image");
+  const iconImage    = document.querySelector(".fa-image");
   const previewLabel = document.querySelector(".add-works label");
   const previewParag = document.querySelector(".add-works p");
 
