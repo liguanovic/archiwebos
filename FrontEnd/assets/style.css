@@ -199,7 +199,6 @@ nav ul {
 	display: flex;
 	align-items: center;
 	list-style-type: none;
-
 }
 
 nav li {
@@ -215,7 +214,7 @@ nav a {
 }
 
 .login-bold {
-	font-size: 1.2rem;
+	font-size: 1.3rem;
 	font-weight: 900 !important;
 }
 
@@ -244,11 +243,12 @@ nav a {
 
 #introduction p {
 	margin-bottom: 0.5em;
+	width: 404px;
 }
 
 #portfolio h2 {
 	text-align: center;
-	margin-bottom: 1em;
+	margin-top: 2em;
 	margin-right: 20px;
 }
 
@@ -279,12 +279,16 @@ nav a {
 	cursor: pointer;
 }
 
+.filters button {
+	padding: 10px 20px !important;
+}
+
 .filters button:nth-of-type(-n+2) {
-	padding: 10px 30px;
+	padding: 10px 10px;
 }
 
 .filters button:hover {
-	background-color: #0E2F28;
+	background-color: #1D6154;
 	color: white;
 }
 
@@ -490,13 +494,12 @@ nav a {
 .add-works figure {
 	display: flex;
 	flex-direction: column;
-	align-items: center;
 	gap: 10px;
 }
 
 .add-works figure img {
-	width: 114px;
-	height: 140px;
+	width: 124px;
+	height: 169px;
 }
 
 .fa-image {
@@ -515,12 +518,19 @@ nav a {
 }
 
 input.form-btn {
-	cursor: pointer;
+	background-color: grey !important;
+	cursor: not-allowed;
 }
 
-input.form-btn:hover {
-	background-color: #0E2F28;
-}
+input.form-btn.active {
+	background-color: #1D6154 !important;
+	cursor: pointer;
+  }
+
+input.form-btn.active:hover {
+	background-color: #0E2F28 !important;
+	cursor: pointer;
+  }
 
 .modal-form select {
 	color: #6C6C6C;
@@ -591,8 +601,7 @@ input.form-btn:hover {
 	height: 50px;
 	font-size: 1.2em;
 	border: none;
-	box-shadow
-	: 0px 4px 14px rgba(0, 0, 0, 0.09);
+	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
 }
 
 #submit:hover {
@@ -643,3 +652,8 @@ footer nav ul li {
 [id="login-footer"] {
 	margin-top: 100px;
 }
+
+button.selected {
+	background-color: #1D6154;
+	color: white;
+  }

@@ -70,7 +70,7 @@ function addFilters(categories) {
   const allButton     = document.createElement("button");
   allButton.id        = "all";
   allButton.innerText = "Tous";
-  allButton.classList.add("filters");
+  allButton.classList.add("filters", "selected");
 
   const allLi = document.createElement("li");
   allLi.appendChild(allButton);
@@ -88,7 +88,23 @@ function addFilters(categories) {
     categoriesContainer.appendChild(li);
   };
 
-  categoriesContainer.addEventListener("click", filterWorks);
+  categoriesContainer.addEventListener("click", handleCategoryClick);
+}
+
+function handleCategoryClick(event) {
+  const clickedButton = event.target;
+  if (clickedButton.tagName === "BUTTON") {
+    filterWorks(event);
+
+    const buttons = document.querySelectorAll(".filters button");
+    buttons.forEach(button => {
+      if (button !== clickedButton) {
+        button.classList.remove("selected");
+      }
+    });
+
+    clickedButton.classList.add("selected");
+  }
 }
 
 /**
@@ -277,27 +293,6 @@ function closeModalIfOutside(event) {
 }
 
 /**
- * Resets the modal by clearing the values of the title input, category select, and image input.
- */
-function resetModal() {
-  const titleInput = document.getElementById("title-input");
-  const categoryInput = document.getElementById("category-input");
-  const imageInput = document.getElementById("image");
-
-  console.log("Title input:", titleInput);
-  console.log("Category input:", categoryInput);
-  console.log("Image input:", imageInput);
-
-  if (titleInput && categoryInput && imageInput) {
-    titleInput.value = "";
-    categoryInput.selectedIndex = 0;
-    imageInput.value = "";
-  } else {
-    console.error("One or more modal elements not found.");
-  }
-}
-
-/**
  * Adds works to the modal by creating figure, img, figcaption, and trashIcon elements,
  * and appending them to the modal body. The function logs a message to the console.
  */
@@ -331,22 +326,16 @@ function addWorksToModal() {
  * Adds a second modal to the page, which allows the user to add a photo with a title and category.
  */
 function AddsecondModal() {
+  const modalContent = document.querySelector(".modal-section");
+
   const firstModalContent = document.querySelector(".modal-body");
-  if (firstModalContent) {
-    firstModalContent.style.display = "none";
-  }
+  if (firstModalContent) firstModalContent.style.display = "none";
 
   const addPictureBtn = document.querySelector(".modal-btn");
-  if (addPictureBtn) {
-    addPictureBtn.style.display = "none";
-  }
-
-  let modalContent = document.querySelector(".modal-section");
+  if (addPictureBtn) addPictureBtn.style.display = "none";
 
   const oldSecondModal = document.querySelector(".second-modal");
-  if (oldSecondModal) {
-    oldSecondModal.remove();
-  }
+  if (oldSecondModal) oldSecondModal.remove();
 
   const h2              = document.querySelector(".modal-header h2");
   const form            = document.createElement("form");
@@ -377,6 +366,7 @@ function AddsecondModal() {
   addWorks.classList.add("add-works");
   iconImage.classList.add("fa-regular", "fa-image");
   submitInput.classList.add("form-btn");
+  submitInput.disabled = true;
 
   imgInput.type              = "file";
   imgInput.id                = "image";
@@ -420,6 +410,25 @@ function AddsecondModal() {
   
   previousModal();
   imgInput.addEventListener("change", previewImage);
+
+  titleInput.addEventListener('input', validateForm);
+  categorieSelect.addEventListener('input', validateForm);
+  imgInput.addEventListener('change', validateForm);
+}
+
+function validateForm() {
+  const titleInput = document.getElementById("title-input");
+  const categoryInput = document.getElementById("category-input");
+  const imageInput = document.getElementById("image");
+  const submitButton = document.querySelector(".form-btn");
+
+  if (titleInput.value && categoryInput.value && imageInput.files.length > 0) {
+    submitButton.classList.add("active");
+    submitButton.disabled = false;
+  } else {
+    submitButton.classList.remove("active");
+    submitButton.disabled = true;
+  }
 }
 
 /**
